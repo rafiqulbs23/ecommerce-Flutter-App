@@ -42,7 +42,10 @@ dependencies:
   get_it: ^8.0.3 # Service locator for dependency injection
   injectable: ^2.5.0 # Code generation for dependency injection
   pretty_dio_logger: ^1.4.0 # Logger for Dio HTTP client
-  objectbox: ^4.3.0 # ObjectBox database for Flutter, used for local data storage
+  objectbox: 4.3.0 # ObjectBox database for Dart and Flutter applications
+  objectbox_flutter_libs: 4.3.0 # ObjectBox database for Flutter applications
+  path: ^1.8.3 # Provides utilities for manipulating file paths
+  path_provider: ^2.1.1 # Provides access to commonly used locations on the filesystem
   json_annotation: ^4.9.0 # Annotations for JSON serialization
 
 
@@ -64,6 +67,7 @@ dev_dependencies:
   build_runner: ^2.5.4 # Build system for Dart projects, used for code generation
   injectable_generator: ^2.7.0 # Code generation for Injectable dependency injection
   json_serializable: ^6.9.5 # Code generation for JSON serialization
+  objectbox_generator: ^4.3.0 # Code generation for ObjectBox models
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
