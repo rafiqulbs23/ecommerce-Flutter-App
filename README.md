@@ -4,12 +4,10 @@ A new Flutter project.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
+# flutter version 3.29.3
+and run this command first and then run the app
 flutter pub run build_runner build --delete-conflicting-outputs
-flutter pub run build_runner watch --delete-conflicting-outputs
+
 
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
