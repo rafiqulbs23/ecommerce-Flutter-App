@@ -34,6 +34,20 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
+  flutter_riverpod: ^2.6.1  # State management solution for Flutter
+  riverpod_annotation: ^2.6.1 # Annotations for Riverpod providers
+  dio: ^5.8.0+1  # HTTP client for making network requests
+  retrofit: ^4.6.0  # Type-safe HTTP client for Dart
+  go_router: ^16.0.0 # Routing package for Flutter applications
+  get_it: ^8.0.3 # Service locator for dependency injection
+  injectable: ^2.5.0 # Code generation for dependency injection
+  pretty_dio_logger: ^1.4.0 # Logger for Dio HTTP client
+  objectbox: ^4.3.0 # ObjectBox database for Flutter, used for local data storage
+  json_annotation: ^4.9.0 # Annotations for JSON serialization
+
+
+
+
 
 dev_dependencies:
   flutter_test:
@@ -45,6 +59,11 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
+  riverpod_generator: ^2.6.5 # Code generation for Riverpod providers
+  retrofit_generator: ^9.2.0 # Code generation for Retrofit API clients
+  build_runner: ^2.5.4 # Build system for Dart projects, used for code generation
+  injectable_generator: ^2.7.0 # Code generation for Injectable dependency injection
+  json_serializable: ^6.9.5 # Code generation for JSON serialization
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
