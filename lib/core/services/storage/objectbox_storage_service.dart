@@ -89,3 +89,10 @@ class ObjectBoxStorageService implements StorageService {
     await _box.removeAllAsync();
   }
 }
+
+@injectable
+Future<StorageService> storageService() async {
+  final storage = ObjectBoxStorageService();
+  await storage.initialize();
+  return storage;
+}
