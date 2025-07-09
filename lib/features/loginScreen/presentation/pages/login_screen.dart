@@ -1,6 +1,11 @@
 import 'package:ecommerce_app/features/loginScreen/presentation/providers/login_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../../core/constants/storage_keys.dart';
+import '../../../../core/di/injection.dart';
+import '../../../../core/services/storage/storage_service.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -29,15 +34,33 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   @override
+  void initState() {
+    checkAuthStatus();
+    super.initState();
+  }
+
+  checkAuthStatus() async {
+    final storage = getIt<StorageService>();
+    final token = await storage.get(StorageKeys.authToken);
+    if (token != null) {
+      context.go('/home');
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    ref.listen(loginProvider, (previous, next) {
+    ref.listen(loginProvider, (previous, next) async{
       next?.maybeWhen(
-        data: (data) {
-         // ref.read(loginProvider.notifier).checkAuthStatus();
+        data: (data) async{
+
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Login Successful')),
           );
-        //  context.go('/home');
+          final storage = getIt<StorageService>();
+          await storage.store(
+            StorageKeys.authToken, data.accessToken,
+          );
+          context.go('/home');
         },
         error: (error, stackTrace) {
           return ScaffoldMessenger.of(context).showSnackBar(
@@ -111,20 +134,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               ),
               const SizedBox(height: 20),
 
-              // Forgot password / Sign up
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextButton(
-                    onPressed: () {},
-                    child: const Text('Forgot Password?'),
-                  ),
-                  TextButton(
-                    onPressed: () {},
-                    child: const Text('Sign Up'),
-                  ),
-                ],
-              ),
             ],
           ),
         ),
