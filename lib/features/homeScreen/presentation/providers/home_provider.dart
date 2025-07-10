@@ -1,4 +1,5 @@
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../../core/di/injection.dart';
@@ -12,6 +13,8 @@ class Home extends _$Home{
   late HomeProductsUseCase useCase;
   int limit = 10;
   int skip = 0;
+  bool isLoadingMore = false;
+
 
 
   @override
@@ -22,6 +25,7 @@ class Home extends _$Home{
 
 
   Future<void> getProducts() async {
+    int skip = 0;
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
 
@@ -31,30 +35,43 @@ class Home extends _$Home{
     });
   }
 
+
+
   Future<void> loadMore() async {
+    if (isLoadingMore) return;
     if (state?.value?.total != null &&
         state?.value?.skip != null &&
         state!.value!.total <= state!.value!.skip) {
       return;
     }
-    state = const AsyncLoading();
+
+    ref.read(isLoadingMoreProvider.notifier).state = true;
     final oldData = state?.value;
-    state = await AsyncValue.guard(() async {
+
+    final newData = await AsyncValue.guard(() async {
       final result = await useCase.call(limit, skip);
       skip += limit;
       return result;
     });
-    if (oldData != null && state!.value != null) {
+
+    if (oldData != null && newData.value != null) {
       state = AsyncValue.data(
         ProductEntity(
-          products: [...oldData.products, ...state!.value!.products],
-          total: state!.value!.total,
-          skip: state?.value?.skip ?? skip,
-          limit: state?.value?.limit ?? limit,
+          products: [...oldData.products, ...newData.value!.products],
+          total: newData.value!.total,
+          skip: skip,
+          limit: limit,
         ),
       );
+    } else {
+      state = newData;
     }
+
+    ref.read(isLoadingMoreProvider.notifier).state = false;
 
   }
 
+
 }
+
+final isLoadingMoreProvider = StateProvider<bool>((ref) => false);

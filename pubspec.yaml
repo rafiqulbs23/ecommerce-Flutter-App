@@ -47,6 +47,7 @@ dependencies:
   path: ^1.8.3 # Provides utilities for manipulating file paths
   path_provider: ^2.1.1 # Provides access to commonly used locations on the filesystem
   json_annotation: ^4.9.0 # Annotations for JSON serialization
+  loading_animation_widget: ^1.3.0 # A collection of loading animations for Flutter
 
 
 
