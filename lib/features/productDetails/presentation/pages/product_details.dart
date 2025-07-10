@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../CartScreen/data/model/cart_response.dart';
+import '../../../CartScreen/presentation/providers/cart_provider.dart' as cartProvider;
 import '../../../homeScreen/domain/entity/product_entity.dart';
 
 class ProductDetails extends ConsumerStatefulWidget {
@@ -72,7 +74,16 @@ class _ProductDetailsState extends ConsumerState<ProductDetails> {
                     ),
                   ),
                   onPressed: () {
-                    // Add to cart logic
+                    final cartState = ref.read(cartProvider.cartProvider.notifier);
+                    cartState.addOrUpdateProduct(
+                      CartProduct(
+                        id: widget.product.id,
+                        name: widget.product.title,
+                        price: widget.product.price,
+                        quantity: 1, // Default quantity
+                        imageUrl: widget.product.thumbnail,
+                      ),
+                    );
                   },
                   child: const Text('Add to Cart',
                     style: TextStyle(

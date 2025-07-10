@@ -6,111 +6,64 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../../core/constants/storage_keys.dart';
 import '../../../../core/di/injection.dart';
 import '../../../../core/services/storage/storage_service.dart';
+import '../../data/model/cart_response.dart';
 
 part 'cart_provider.g.dart';
-class Product {
-  final int id;
-  final String name;
-  final double price;
-  final int quantity;
-  final String imageUrl;
-
-  Product({
-    required this.id,
-    required this.name,
-    required this.price,
-    required this.quantity,
-    required this.imageUrl,
-  });
-}
-
 @riverpod
-class Cart extends _$Cart{
-final List<Product> allProduct = [];
-
-
+@riverpod
+class Cart extends _$Cart {
+  final List<CartProduct> allProduct = [];
 
   @override
-  AsyncValue<List<Product>>? build(){
-    final storage = getIt<StorageService>();
-    storage.get(StorageKeys.cart).then((value){
-      if (value != null) {
-        final List<dynamic> products = value as List<Product>;
-        allProduct.addAll(products.map((e) => Product(
-          id: e['id'],
-          name: e['name'],
-          price: e['price'],
-          quantity: e['quantity'],
-          imageUrl: e['imageUrl'],
-        )).toList());
-      }
-      state = AsyncValue.data(allProduct);
-    }).catchError((error) {
-      //state = AsyncValue.error(error);
-    });
+  AsyncValue<List<CartProduct>>? build()  {
     return null;
   }
 
 
+  Future<void> getCard() async {
 
+    final storage = getIt<StorageService>();
 
-Future<void> addOrUpdateProduct(Product newProduct) async {
-  // 1. Find existing product in allProduct by id
-  final index = allProduct.indexWhere((p) => p.id == newProduct.id);
+    state = await AsyncValue.guard(() async {
+      final raw = await storage.get(StorageKeys.cart);
 
-  if (index != -1) {
-    // Update quantity or other fields
-    final existingProduct = allProduct[index];
-    allProduct[index] = Product(
-      id: existingProduct.id,
-      name: existingProduct.name,
-      price: existingProduct.price,
-      quantity: existingProduct.quantity + newProduct.quantity,
-      imageUrl: existingProduct.imageUrl,
-    );
-  } else {
-    // Add new product
-    allProduct.add(newProduct);
+      if (raw != null && raw is List) {
+        final cartItems = raw.map((e) => CartProduct.fromJson(e as Map<String, dynamic>)).toList();
+        return cartItems;
+      }
+      return [];
+    });
   }
 
-  // 2. Save updated allProduct to local storage
-  final storage = getIt<StorageService>();
-  await storage.store(
-    StorageKeys.cart,
-    allProduct,
-  );
 
-  state = AsyncValue.data(List.from(allProduct));
-}
+  Future<void> addOrUpdateProduct(CartProduct newProduct) async {
+    final index = allProduct.indexWhere((p) => p.id == newProduct.id);
 
-Future<void> removeProduct(int productId) async {
-  // 1. Remove product from allProduct by id
-  allProduct.removeWhere((p) => p.id == productId);
+    if (index != -1) {
+      final existing = allProduct[index];
+      allProduct[index] = existing.copyWith(
+        quantity: existing.quantity + newProduct.quantity,
+      );
+    } else {
+      allProduct.add(newProduct);
+    }
 
-  // 2. Save updated allProduct to local storage
-  final storage = getIt<StorageService>();
-  await storage.store(
-    StorageKeys.cart,
-    allProduct,
-  );
+    final storage = getIt<StorageService>();
+    await storage.store(
+      StorageKeys.cart,
+      allProduct.map((p) => p.toJson()).toList(),
+    );
 
-  state = AsyncValue.data(List.from(allProduct));
-}
-Future<void> clearCart() async {
-  // Clear the cart
-  allProduct.clear();
+    final raw = await storage.get(StorageKeys.cart);
 
-  // Save empty cart to local storage
-  final storage = getIt<StorageService>();
-  await storage.store(
-    StorageKeys.cart,
-    allProduct,
-  );
+    if (raw != null && raw is List) {
+      allProduct.addAll(
+        raw.map((e) => CartProduct.fromJson(e)).toList(),
+      );
+    }
+    state = await AsyncValue.guard(() async {
+      return allProduct;
+    });
 
-  state = AsyncValue.data(List.from(allProduct));
-}
-
-
-
-
+  }
 }
