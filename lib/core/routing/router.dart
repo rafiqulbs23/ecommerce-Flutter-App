@@ -1,3 +1,4 @@
+import 'package:ecommerce_app/features/CartScreen/presentation/pages/cart_screen.dart';
 import 'package:ecommerce_app/features/homeScreen/presentation/pages/home_screen.dart';
 import 'package:ecommerce_app/features/productDetails/presentation/pages/product_details.dart';
 import 'package:go_router/go_router.dart';
@@ -27,6 +28,10 @@ final GoRouter router = GoRouter(
           product: product,
         );
       },
-    )
+    ),
+    GoRoute(
+      path: '/cart',
+      builder: (context, state) => const CartScreen(),
+    ),
   ],
 );

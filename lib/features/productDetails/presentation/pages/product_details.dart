@@ -21,6 +21,7 @@ class _ProductDetailsState extends ConsumerState<ProductDetails> {
       ),
       body: Column(
         children: [
+          Image.network(widget.product.thumbnail),
           const Text(
             'Product Details',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
@@ -52,6 +53,41 @@ class _ProductDetailsState extends ConsumerState<ProductDetails> {
           ),
         ],
       ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 16),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.blue, // Background color
+            borderRadius: BorderRadius.circular(12), // Rounded corners
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blueAccent, // Button background
+                    foregroundColor: Colors.blueAccent, // Text/icon color
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  onPressed: () {
+                    // Add to cart logic
+                  },
+                  child: const Text('Add to Cart',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white, // Text color
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+
     );
   }
 }

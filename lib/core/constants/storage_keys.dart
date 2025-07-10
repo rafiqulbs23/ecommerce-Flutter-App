@@ -4,7 +4,5 @@ class StorageKeys {
   
   static const String authToken = 'auth_token';
   static const String refreshToken = 'refresh_token';
-  static const String userEmail = 'user_email';
-  static const String themeMode = 'theme_mode';
-  static const String deviceId = 'device_id';
+  static const String cart = 'cart';
 }

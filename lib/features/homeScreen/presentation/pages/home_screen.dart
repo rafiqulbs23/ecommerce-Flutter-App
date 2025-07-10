@@ -50,6 +50,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return Scaffold(
         appBar: AppBar(
           title: const Text('Home Screen'),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.shopping_cart),
+              onPressed: () {
+                context.push('/cart');
+              },
+            ),
+          ],
         ),
         body: Column(
           children: [
